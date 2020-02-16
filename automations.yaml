@@ -1,0 +1,47 @@
+- id: '1581117159249'
+  alias: Button single -> A/C Heat
+  description: ''
+  trigger:
+  - event_data:
+      click_type: single
+      entity_id: binary_sensor.switch_158d00035a9ab0
+    event_type: xiaomi_aqara.click
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: switch.ac_living_room
+    service: switch.turn_on
+- id: '1581117232183'
+  alias: Button double -> Samsung TV
+  description: ''
+  trigger:
+  - event_data:
+      click_type: double
+      entity_id: binary_sensor.switch_158d00035a9ab0
+    event_type: xiaomi_aqara.click
+    platform: event
+  condition: []
+  action:
+  - entity_id: switch.tv_samsung
+    service: switch.turn_on
+- id: '1581365396454'
+  alias: Motion Sensor Hallway Light
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.motion_sensor_158d0003faf22d
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  action:
+  - data:
+      entity_id: light.gateway_light_04cf8caa956b
+    service: light.turn_on
+  - delay: 00:00:30
+  - data:
+      entity_id: light.gateway_light_04cf8caa956b
+    service: light.turn_off

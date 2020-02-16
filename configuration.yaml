@@ -1,0 +1,75 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+
+http:
+  # For extra security set this to only accept connections on localhost if NGINX is on the same machine
+  # server_host: 127.0.0.1
+  base_url: https://capibara.duckdns.org
+  use_x_forwarded_for: true
+  trusted_proxies: 127.0.0.1
+
+#switcher_aio:
+#  phone_id: 226b
+#  device_id: 8ef91e
+#  device_password: 38373138
+
+samsungtv:
+  - host: 192.168.1.104
+
+xiaomi_aqara:
+  discovery_retry: 5
+  gateways:
+    - key: FDFC05F6299A4E1B
+
+sensor:
+  - platform: mitemp_bt
+    name: "Living Room"
+    mac: '4C:65:A8:DE:10:8D'
+    retries: 5
+
+google_assistant:
+  project_id: home-assistant-a11e8
+  service_account: !include service_account.json
+  report_state: true
+
+switch:
+  - platform: template
+    switches:
+      ac_heat:
+        friendly_name: "A/C Heat"
+        value_template: "{{ is_state('binary_sensor.door_window_sensor_158d0004508bf6', 'on') }}"
+        turn_on:
+          service: switch.toggle
+          data:
+            entity_id: switch.ac_living_room
+        turn_off:
+          service: switch.toggle
+          data:
+            entity_id: switch.ac_living_room
+  - platform: broadlink
+    host: 192.168.1.111
+    mac: '78:0F:77:B9:27:90'
+    switches:
+      tv_samsung:
+        friendly_name: "Samsung TV"
+        command_on: 'JgDSAJSUEzcSNxM3EhISExISEhMSEhI3EzcSOBISEhISExISEhITNxISEhMROBI4EhISExE4EhMROBI4EhISEhI4EjgSEhIABgCUlBI3EzcSOBISEhISExISEhISOBI3EzcSEhITEhISExISEjcTEhISEjgSNxITERMSOBISEjcSOBISExISNxI4EhISAAYAlJQSOBI3EzcSEhITEhISEhITEjcSOBI3ExISEhITERMSEhI4EhISExE4EjgSEhISEjgSEhI4EjcTEhISEjgSNxITEgANBQAAAAAAAA=='
+        command_off: 'JgDSAJaUEzYTNxI4EhISEhMSERMRExI4EjgSNxMSEBQSEhITEBQRExITERMRNhU3EhMQFBI3EzcSOBM2EhMRExI3EjgSEhIABgCUlBI4EzYUNhITERMSEhITEBQSNxM3EjgTERISEhMRExISERQRExISEjgSOBMRERMRORI3EzcTNxETERMRORI3ExISAAYAlJQTNhI4EzYUERISEhMRExISEjgSNxM3EhISExETEhITEhETEhMRExI3EjgTERITETgSOBI3EzcSEhITETgTNxISEgANBQAAAAAAAA=='
+
+      ac_living_room:
+        friendly_name: "A/C Heat"
+        command_on:
+          'JgC4AGOBQEBBP0EfISAgICEfIR8hPyIfICAgIEEfIR8hHyEgICAhHyEfIR8hICAgICAhHyEfIR8hICAgIEBCHmOBQT9BP0EfISAgICEfIR8hPyEgIR8gIEEfIR8hHyEfISAhHyEfIR8hHyEgICAhHyEfIR8hHyEfIUBBH2OBQEBBP0EfIR8hICEfIR8hPyEgHyEhH0AgIR8hHyEfISAhHyIeIx0jHSMdISAhHyEfIR8hHyEfIUBDHYQADQU='
+        command_off:
+          'JgC4AGOBQEBBP0EfISAgICEfIR8hPyIfICAgIEEfIR8hHyEgICAhHyEfIR8hICAgICAhHyEfIR8hICAgIEBCHmOBQT9BP0EfISAgICEfIR8hPyEgIR8gIEEfIR8hHyEfISAhHyEfIR8hHyEgICAhHyEfIR8hHyEfIUBBH2OBQEBBP0EfIR8hICEfIR8hPyEgHyEhH0AgIR8hHyEfISAhHyIeIx0jHSMdISAhHyEfIR8hHyEfIUBDHYQADQU='
+
